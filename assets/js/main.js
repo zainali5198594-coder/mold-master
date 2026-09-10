@@ -11,6 +11,7 @@ const products=[
 function money(n){return 'Rs. '+Number(n).toLocaleString('en-PK')}
 function addToCart(id){const p=products.find(x=>x.id===id);let cart=JSON.parse(localStorage.getItem('moldMasterCart')||'[]');const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({...p,qty:1});localStorage.setItem('moldMasterCart',JSON.stringify(cart));updateCartCount();alert(p.name+' added to cart');}
 function updateCartCount(){const cart=JSON.parse(localStorage.getItem('moldMasterCart')||'[]');const count=cart.reduce((s,x)=>s+x.qty,0);document.querySelectorAll('#cartCount').forEach(e=>e.textContent=count)}
-function card(p){return `<article class="product-card"><div class="product-img"><span>${p.icon}</span></div><div class="product-info"><p>${p.category} · ${p.tag}</p><h3>${p.name}</h3><div><span class="price">${money(p.price)}</span> <span class="old">${money(p.old)}</span><button class="mini-btn" onclick="addToCart(${p.id})">+ Cart</button></div></div></article>`}
+function productLink(id){return `product.html?id=${id}`}
+function card(p){return `<article class="product-card"><a class="product-img" href="${productLink(p.id)}" aria-label="View ${p.name}"><span>${p.icon}</span></a><div class="product-info"><p>${p.category} · ${p.tag}</p><h3><a href="${productLink(p.id)}">${p.name}</a></h3><div><span class="price">${money(p.price)}</span> <span class="old">${money(p.old)}</span><button class="mini-btn" onclick="addToCart(${p.id})">+ Cart</button></div></div></article>`}
 function renderFeatured(){const el=document.getElementById('featuredProducts');if(el)el.innerHTML=products.slice(0,4).map(card).join('')}
 updateCartCount();renderFeatured();
