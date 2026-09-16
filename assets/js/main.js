@@ -3,7 +3,7 @@ const CART_KEY = 'moldMasterCart';
 const WISHLIST_KEY = 'moldMasterWishlist';
 
 // Image sources: original MOLD MASTER vector visuals, the user's uploaded can-opener photo,
-// and a few public-domain Wikimedia Commons images for generic baking tools.
+// and public-domain Wikimedia Commons images for generic baking tools.
 const svgData = svg => 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
 const visual = {
   nozzle: svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" rx="36" fill="#f8f6f0"/><text x="400" y="70" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#122b4d">12-PIECE NOZZLE SET</text><g fill="none" stroke="#c99b22" stroke-width="18"><path d="M170 170h70l20 55H150z"/><path d="M320 170h70l20 55H300z"/><path d="M470 170h70l20 55H450z"/><path d="M620 170h70l20 55H600z"/><path d="M170 300h70l20 55H150z"/><path d="M320 300h70l20 55H300z"/><path d="M470 300h70l20 55H450z"/><path d="M620 300h70l20 55H600z"/></g><path d="M170 465h460" stroke="#122b4d" stroke-width="10"/><text x="400" y="525" text-anchor="middle" font-family="Arial" font-size="26" fill="#6a6a6a">Professional cake decorating tips</text></svg>`),
@@ -21,8 +21,7 @@ const products = [
   {id:5,name:'Creative Cookie Cutter Set',category:'Cookie Cutters',price:499,old:699,tag:'Sale',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/CookieCuttersAl.jpg'},
   {id:6,name:'Cake Scraper Set',category:'Decorating Tools',price:759,old:950,tag:'Popular',image:visual.scraper},
   {id:7,name:'Muffin & Cupcake Pan',category:'Baking Accessories',price:1350,old:1700,tag:'New',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Muffin_pan.jpg'},
-  {id:8,name:'Pizza Cutter',category:'Baking Accessories',price:449,old:599,tag:'Value',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Wood_and_bone_pastry_wheel.jpg'},
-  {id:9,name:'Can & Bottle Opener',category:'Baking Accessories',price:899,old:null,tag:'New',image:'assets/images/can-opener.jpg'}
+  {id:8,name:'Can & Bottle Opener',category:'Baking Accessories',price:899,old:null,tag:'New',image:'assets/images/can-opener.jpg'}
 ];
 
 function money(n){ return 'Rs. ' + Number(n).toLocaleString('en-PK'); }
