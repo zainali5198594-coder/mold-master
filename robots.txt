@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://zainali5198594-coder.github.io/mold-master/sitemap.xml
