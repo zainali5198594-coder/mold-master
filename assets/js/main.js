@@ -1,17 +1,63 @@
-const products=[
-{id:1,name:'12-Piece Nozzle Set',category:'Decorating Tools',price:1699,old:1999,icon:'✦',tag:'Bestseller'},
-{id:2,name:'Premium Cake Mold',category:'Cake Molds',price:899,old:1250,icon:'◯',tag:'Sale'},
-{id:3,name:'Silicone Fondant Mold',category:'Silicone Molds',price:599,old:850,icon:'◇',tag:'Popular'},
-{id:4,name:'Fondant Decorating Tool Kit',category:'Fondant Tools',price:1199,old:1499,icon:'✧',tag:'New'},
-{id:5,name:'Creative Cookie Cutter Set',category:'Cookie Cutters',price:499,old:699,icon:'○',tag:'Sale'},
-{id:6,name:'Cake Scraper Set',category:'Decorating Tools',price:759,old:950,icon:'▱',tag:'Popular'},
-{id:7,name:'Muffin & Cupcake Pan',category:'Baking Accessories',price:1350,old:1700,icon:'□',tag:'New'},
-{id:8,name:'Pizza Cutter',category:'Baking Accessories',price:449,old:599,icon:'◒',tag:'Value'}
+const WHATSAPP = '923338748486';
+const CART_KEY = 'moldMasterCart';
+const WISHLIST_KEY = 'moldMasterWishlist';
+
+// Existing repository catalog entries. Product images are intentionally left as data-required
+// placeholders until the real MOLD MASTER catalog assets are supplied.
+const products = [
+  {id:1,name:'12-Piece Nozzle Set',category:'Decorating Tools',price:1699,old:1999,tag:'Bestseller',image:null},
+  {id:2,name:'Premium Cake Mold',category:'Cake Molds',price:899,old:1250,tag:'Sale',image:null},
+  {id:3,name:'Silicone Fondant Mold',category:'Silicone Molds',price:599,old:850,tag:'Popular',image:null},
+  {id:4,name:'Fondant Decorating Tool Kit',category:'Fondant Tools',price:1199,old:1499,tag:'New',image:null},
+  {id:5,name:'Creative Cookie Cutter Set',category:'Cookie Cutters',price:499,old:699,tag:'Sale',image:null},
+  {id:6,name:'Cake Scraper Set',category:'Decorating Tools',price:759,old:950,tag:'Popular',image:null},
+  {id:7,name:'Muffin & Cupcake Pan',category:'Baking Accessories',price:1350,old:1700,tag:'New',image:null},
+  {id:8,name:'Pizza Cutter',category:'Baking Accessories',price:449,old:599,tag:'Value',image:null}
 ];
-function money(n){return 'Rs. '+Number(n).toLocaleString('en-PK')}
-function addToCart(id){const p=products.find(x=>x.id===id);let cart=JSON.parse(localStorage.getItem('moldMasterCart')||'[]');const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({...p,qty:1});localStorage.setItem('moldMasterCart',JSON.stringify(cart));updateCartCount();alert(p.name+' added to cart');}
-function updateCartCount(){const cart=JSON.parse(localStorage.getItem('moldMasterCart')||'[]');const count=cart.reduce((s,x)=>s+x.qty,0);document.querySelectorAll('#cartCount').forEach(e=>e.textContent=count)}
-function productLink(id){return `product.html?id=${id}`}
-function card(p){return `<article class="product-card"><a class="product-img" href="${productLink(p.id)}" aria-label="View ${p.name}"><span>${p.icon}</span></a><div class="product-info"><p>${p.category} · ${p.tag}</p><h3><a href="${productLink(p.id)}">${p.name}</a></h3><div><span class="price">${money(p.price)}</span> <span class="old">${money(p.old)}</span><button class="mini-btn" onclick="addToCart(${p.id})">+ Cart</button></div></div></article>`}
-function renderFeatured(){const el=document.getElementById('featuredProducts');if(el)el.innerHTML=products.slice(0,4).map(card).join('')}
-updateCartCount();renderFeatured();
+
+function money(n){ return 'Rs. ' + Number(n).toLocaleString('en-PK'); }
+function getCart(){ try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}catch{return[]} }
+function saveCart(cart){ localStorage.setItem(CART_KEY,JSON.stringify(cart)); updateCartCount(); }
+function getWishlist(){ try{return JSON.parse(localStorage.getItem(WISHLIST_KEY)||'[]')}catch{return[]} }
+function updateCartCount(){ const count=getCart().reduce((s,x)=>s+Number(x.qty||0),0); document.querySelectorAll('#cartCount').forEach(e=>e.textContent=count); }
+function addToCart(id,qty=1){ const p=products.find(x=>x.id===Number(id)); if(!p)return; const cart=getCart(); const item=cart.find(x=>x.id===p.id); if(item)item.qty=Math.min(99,item.qty+qty); else cart.push({...p,qty:Math.max(1,qty)}); saveCart(cart); toast(`${p.name} added to cart`); }
+function removeFromCart(id){ saveCart(getCart().filter(x=>x.id!==Number(id))); }
+function setCartQty(id,qty){ const cart=getCart(); const item=cart.find(x=>x.id===Number(id)); if(!item)return; item.qty=Math.max(1,Math.min(99,Number(qty)||1)); saveCart(cart); }
+function cartSubtotal(){ return getCart().reduce((s,x)=>s+x.price*x.qty,0); }
+function productLink(id){ return `product.html?id=${id}`; }
+function whatsappUrl(message){ return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`; }
+function orderMessage(p){ return `Assalam o Alaikum MOLD MASTER, I want to order ${p.name} for ${money(p.price)}.`; }
+function productVisual(p,large=false){
+  if(p.image) return `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy">`;
+  return `<div class="product-placeholder"><span>IMAGE</span><small>Real product image pending</small></div>`;
+}
+function card(p){
+  const wish=getWishlist().includes(p.id);
+  return `<article class="product-card"><a class="product-img" href="${productLink(p.id)}">${productVisual(p)}<span class="product-tag">${escapeHtml(p.tag||'')}</span></a><div class="product-info"><p>${escapeHtml(p.category)}</p><h3><a href="${productLink(p.id)}">${escapeHtml(p.name)}</a></h3><div class="price-row"><span class="price">${money(p.price)}</span>${p.old?`<span class="old">${money(p.old)}</span>`:''}</div><div class="card-actions"><button class="mini-btn" onclick="addToCart(${p.id})">Add to Cart</button><button class="wish-btn ${wish?'active':''}" aria-label="Wishlist" onclick="toggleWishlist(${p.id})">${wish?'♥':'♡'}</button></div></div></article>`;
+}
+function renderFeatured(){ const el=document.getElementById('featuredProducts'); if(el)el.innerHTML=products.slice(0,4).map(card).join(''); }
+function renderShop(){
+  const el=document.getElementById('products'); if(!el)return;
+  let list=[...products];
+  const q=(document.getElementById('search')?.value||new URLSearchParams(location.search).get('q')||'').trim().toLowerCase();
+  const c=document.getElementById('category')?.value||new URLSearchParams(location.search).get('category')||'';
+  const s=document.getElementById('sort')?.value||'default';
+  if(q)list=list.filter(p=>(p.name+' '+p.category+' '+(p.tag||'')).toLowerCase().includes(q));
+  if(c)list=list.filter(p=>p.category===c);
+  if(s==='low')list.sort((a,b)=>a.price-b.price);
+  if(s==='high')list.sort((a,b)=>b.price-a.price);
+  if(s==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
+  el.innerHTML=list.length?list.map(card).join(''):`<div class="empty-state"><h3>No products found</h3><p>Try another search or category.</p><a class="btn btn-dark" href="shop.html">View all products</a></div>`;
+  const count=document.getElementById('resultCount'); if(count)count.textContent=`${list.length} product${list.length===1?'':'s'}`;
+}
+function toggleWishlist(id){ const w=getWishlist(); const i=w.indexOf(Number(id)); if(i>=0)w.splice(i,1);else w.push(Number(id)); localStorage.setItem(WISHLIST_KEY,JSON.stringify(w)); renderFeatured(); renderShop(); }
+function renderCart(){
+  const el=document.getElementById('cartItems'); if(!el)return;
+  const cart=getCart();
+  el.innerHTML=cart.length?cart.map(x=>`<article class="cart-item"><div class="cart-thumb">${productVisual(x)}</div><div class="cart-main"><h3>${escapeHtml(x.name)}</h3><p>${escapeHtml(x.category)}</p><strong>${money(x.price)}</strong></div><div class="qty"><button onclick="setCartQty(${x.id},${x.qty-1});renderCart()">−</button><span>${x.qty}</span><button onclick="setCartQty(${x.id},${x.qty+1});renderCart()">+</button></div><div class="cart-line">${money(x.price*x.qty)}</div><button class="remove-btn" onclick="removeFromCart(${x.id});renderCart()">Remove</button></article>`).join(''):`<div class="empty-state"><h2>Your cart is empty.</h2><p>Add baking tools to continue.</p><a class="btn btn-dark" href="shop.html">Continue Shopping</a></div>`;
+  const sub=cartSubtotal(); document.querySelectorAll('#cartSubtotal').forEach(e=>e.textContent=money(sub)); document.querySelectorAll('#cartTotal').forEach(e=>e.textContent=money(sub));
+}
+function toast(text){ let t=document.getElementById('toast'); if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t)} t.textContent=text;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800); }
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function setupMenu(){ const b=document.querySelector('.menu'),nav=document.querySelector('.nav nav'); if(b&&nav)b.addEventListener('click',()=>nav.classList.toggle('open')); }
+updateCartCount(); renderFeatured(); renderShop(); renderCart(); setupMenu();
