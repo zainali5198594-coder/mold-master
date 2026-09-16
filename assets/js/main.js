@@ -2,8 +2,7 @@ const WHATSAPP = '923338748486';
 const CART_KEY = 'moldMasterCart';
 const WISHLIST_KEY = 'moldMasterWishlist';
 
-// Existing repository catalog entries. Product images are intentionally left as data-required
-// placeholders until the real MOLD MASTER catalog assets are supplied.
+// Existing repository catalog entries. Real product images can be added to the image field later.
 const products = [
   {id:1,name:'12-Piece Nozzle Set',category:'Decorating Tools',price:1699,old:1999,tag:'Bestseller',image:null},
   {id:2,name:'Premium Cake Mold',category:'Cake Molds',price:899,old:1250,tag:'Sale',image:null},
@@ -21,19 +20,19 @@ function saveCart(cart){ localStorage.setItem(CART_KEY,JSON.stringify(cart)); up
 function getWishlist(){ try{return JSON.parse(localStorage.getItem(WISHLIST_KEY)||'[]')}catch{return[]} }
 function updateCartCount(){ const count=getCart().reduce((s,x)=>s+Number(x.qty||0),0); document.querySelectorAll('#cartCount').forEach(e=>e.textContent=count); }
 function addToCart(id,qty=1){ const p=products.find(x=>x.id===Number(id)); if(!p)return; const cart=getCart(); const item=cart.find(x=>x.id===p.id); if(item)item.qty=Math.min(99,item.qty+qty); else cart.push({...p,qty:Math.max(1,qty)}); saveCart(cart); toast(`${p.name} added to cart`); }
-function removeFromCart(id){ saveCart(getCart().filter(x=>x.id!==Number(id))); }
+function removeFromCart(id){ saveCart(getCart().filter(x=>x.id!==Number(id))); toast('Item removed from cart'); }
 function setCartQty(id,qty){ const cart=getCart(); const item=cart.find(x=>x.id===Number(id)); if(!item)return; item.qty=Math.max(1,Math.min(99,Number(qty)||1)); saveCart(cart); }
 function cartSubtotal(){ return getCart().reduce((s,x)=>s+x.price*x.qty,0); }
 function productLink(id){ return `product.html?id=${id}`; }
 function whatsappUrl(message){ return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`; }
 function orderMessage(p){ return `Assalam o Alaikum MOLD MASTER, I want to order ${p.name} for ${money(p.price)}.`; }
-function productVisual(p,large=false){
-  if(p.image) return `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy">`;
+function productVisual(p){
+  if(p.image) return `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">`;
   return `<div class="product-placeholder"><span>IMAGE</span><small>Real product image pending</small></div>`;
 }
 function card(p){
   const wish=getWishlist().includes(p.id);
-  return `<article class="product-card"><a class="product-img" href="${productLink(p.id)}">${productVisual(p)}<span class="product-tag">${escapeHtml(p.tag||'')}</span></a><div class="product-info"><p>${escapeHtml(p.category)}</p><h3><a href="${productLink(p.id)}">${escapeHtml(p.name)}</a></h3><div class="price-row"><span class="price">${money(p.price)}</span>${p.old?`<span class="old">${money(p.old)}</span>`:''}</div><div class="card-actions"><button class="mini-btn" onclick="addToCart(${p.id})">Add to Cart</button><button class="wish-btn ${wish?'active':''}" aria-label="Wishlist" onclick="toggleWishlist(${p.id})">${wish?'♥':'♡'}</button></div></div></article>`;
+  return `<article class="product-card reveal"><a class="product-img" href="${productLink(p.id)}">${productVisual(p)}<span class="product-tag">${escapeHtml(p.tag||'')}</span></a><div class="product-info"><p>${escapeHtml(p.category)}</p><h3><a href="${productLink(p.id)}">${escapeHtml(p.name)}</a></h3><div class="price-row"><span class="price">${money(p.price)}</span>${p.old?`<span class="old">${money(p.old)}</span>`:''}</div><div class="card-actions"><button class="mini-btn" onclick="addToCart(${p.id})">Add to Cart</button><button class="wish-btn ${wish?'active':''}" aria-label="Wishlist" onclick="toggleWishlist(${p.id})">${wish?'♥':'♡'}</button></div></div></article>`;
 }
 function renderFeatured(){ const el=document.getElementById('featuredProducts'); if(el)el.innerHTML=products.slice(0,4).map(card).join(''); }
 function renderShop(){
@@ -50,14 +49,25 @@ function renderShop(){
   el.innerHTML=list.length?list.map(card).join(''):`<div class="empty-state"><h3>No products found</h3><p>Try another search or category.</p><a class="btn btn-dark" href="shop.html">View all products</a></div>`;
   const count=document.getElementById('resultCount'); if(count)count.textContent=`${list.length} product${list.length===1?'':'s'}`;
 }
-function toggleWishlist(id){ const w=getWishlist(); const i=w.indexOf(Number(id)); if(i>=0)w.splice(i,1);else w.push(Number(id)); localStorage.setItem(WISHLIST_KEY,JSON.stringify(w)); renderFeatured(); renderShop(); }
+function toggleWishlist(id){ const w=getWishlist(); const i=w.indexOf(Number(id)); if(i>=0)w.splice(i,1);else w.push(Number(id)); localStorage.setItem(WISHLIST_KEY,JSON.stringify(w)); renderFeatured(); renderShop(); toast(i>=0?'Removed from wishlist':'Added to wishlist'); }
 function renderCart(){
   const el=document.getElementById('cartItems'); if(!el)return;
   const cart=getCart();
-  el.innerHTML=cart.length?cart.map(x=>`<article class="cart-item"><div class="cart-thumb">${productVisual(x)}</div><div class="cart-main"><h3>${escapeHtml(x.name)}</h3><p>${escapeHtml(x.category)}</p><strong>${money(x.price)}</strong></div><div class="qty"><button onclick="setCartQty(${x.id},${x.qty-1});renderCart()">−</button><span>${x.qty}</span><button onclick="setCartQty(${x.id},${x.qty+1});renderCart()">+</button></div><div class="cart-line">${money(x.price*x.qty)}</div><button class="remove-btn" onclick="removeFromCart(${x.id});renderCart()">Remove</button></article>`).join(''):`<div class="empty-state"><h2>Your cart is empty.</h2><p>Add baking tools to continue.</p><a class="btn btn-dark" href="shop.html">Continue Shopping</a></div>`;
+  el.innerHTML=cart.length?cart.map(x=>`<article class="cart-item reveal"><div class="cart-thumb">${productVisual(x)}</div><div class="cart-main"><h3>${escapeHtml(x.name)}</h3><p>${escapeHtml(x.category)}</p><strong>${money(x.price)}</strong></div><div class="qty"><button aria-label="Decrease quantity" onclick="setCartQty(${x.id},${x.qty-1});renderCart()">−</button><span>${x.qty}</span><button aria-label="Increase quantity" onclick="setCartQty(${x.id},${x.qty+1});renderCart()">+</button></div><div class="cart-line">${money(x.price*x.qty)}</div><button class="remove-btn" onclick="removeFromCart(${x.id});renderCart()">Remove</button></article>`).join(''):`<div class="empty-state"><h2>Your cart is empty.</h2><p>Add baking tools to continue.</p><a class="btn btn-dark" href="shop.html">Continue Shopping</a></div>`;
   const sub=cartSubtotal(); document.querySelectorAll('#cartSubtotal').forEach(e=>e.textContent=money(sub)); document.querySelectorAll('#cartTotal').forEach(e=>e.textContent=money(sub));
 }
-function toast(text){ let t=document.getElementById('toast'); if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t)} t.textContent=text;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800); }
+function toast(text){ let t=document.getElementById('toast'); if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t)} t.textContent=text;t.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove('show'),1800); }
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
-function setupMenu(){ const b=document.querySelector('.menu'),nav=document.querySelector('.nav nav'); if(b&&nav)b.addEventListener('click',()=>nav.classList.toggle('open')); }
-updateCartCount(); renderFeatured(); renderShop(); renderCart(); setupMenu();
+function setupMenu(){ const b=document.querySelector('.menu'),nav=document.querySelector('.nav nav'); if(!b||!nav)return; b.setAttribute('aria-expanded','false'); b.addEventListener('click',()=>{const open=nav.classList.toggle('open');b.setAttribute('aria-expanded',String(open));}); nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');b.setAttribute('aria-expanded','false')})); document.addEventListener('keydown',e=>{if(e.key==='Escape'){nav.classList.remove('open');b.setAttribute('aria-expanded','false')}}); }
+function setupHeader(){ const header=document.querySelector('.header'); if(!header)return; const update=()=>header.classList.toggle('scrolled',window.scrollY>12); update(); window.addEventListener('scroll',update,{passive:true}); }
+function setupSearch(){ const input=document.getElementById('search'); if(!input)return; input.addEventListener('input',()=>renderShop()); input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();renderShop()}}); const category=document.getElementById('category'); const sort=document.getElementById('sort'); if(category)category.addEventListener('change',renderShop); if(sort)sort.addEventListener('change',renderShop); }
+function setupInteractions(){ document.addEventListener('click',e=>{const button=e.target.closest('.btn,.mini-btn,.wish-btn');if(!button)return;button.classList.remove('click-pop');void button.offsetWidth;button.classList.add('click-pop');}); }
+
+updateCartCount();
+renderFeatured();
+renderShop();
+renderCart();
+setupMenu();
+setupHeader();
+setupSearch();
+setupInteractions();
