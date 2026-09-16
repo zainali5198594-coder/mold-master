@@ -2,16 +2,27 @@ const WHATSAPP = '923338748486';
 const CART_KEY = 'moldMasterCart';
 const WISHLIST_KEY = 'moldMasterWishlist';
 
-// Existing repository catalog entries. Real product images can be added to the image field later.
+// Image sources: original MOLD MASTER vector visuals, the user's uploaded can-opener photo,
+// and a few public-domain Wikimedia Commons images for generic baking tools.
+const svgData = svg => 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+const visual = {
+  nozzle: svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" rx="36" fill="#f8f6f0"/><text x="400" y="70" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#122b4d">12-PIECE NOZZLE SET</text><g fill="none" stroke="#c99b22" stroke-width="18"><path d="M170 170h70l20 55H150z"/><path d="M320 170h70l20 55H300z"/><path d="M470 170h70l20 55H450z"/><path d="M620 170h70l20 55H600z"/><path d="M170 300h70l20 55H150z"/><path d="M320 300h70l20 55H300z"/><path d="M470 300h70l20 55H450z"/><path d="M620 300h70l20 55H600z"/></g><path d="M170 465h460" stroke="#122b4d" stroke-width="10"/><text x="400" y="525" text-anchor="middle" font-family="Arial" font-size="26" fill="#6a6a6a">Professional cake decorating tips</text></svg>`),
+  mold: svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" rx="36" fill="#f8f6f0"/><text x="400" y="72" text-anchor="middle" font-family="Arial" font-size="36" font-weight="700" fill="#122b4d">PREMIUM CAKE MOLD</text><ellipse cx="400" cy="315" rx="235" ry="150" fill="#d9dde1" stroke="#122b4d" stroke-width="12"/><ellipse cx="400" cy="300" rx="185" ry="110" fill="#fff" stroke="#c99b22" stroke-width="10"/><path d="M250 390Q400 455 550 390" fill="none" stroke="#c99b22" stroke-width="14"/><text x="400" y="520" text-anchor="middle" font-family="Arial" font-size="28" fill="#6a6a6a">Reusable baking pan</text></svg>`),
+  silicone: svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" rx="36" fill="#f8f6f0"/><text x="400" y="70" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#122b4d">SILICONE FONDANT MOLD</text><rect x="150" y="150" width="500" height="300" rx="42" fill="#d9a6b5" stroke="#122b4d" stroke-width="10"/><g fill="#f8f6f0" stroke="#fff" stroke-width="8"><circle cx="250" cy="240" r="45"/><circle cx="400" cy="240" r="45"/><circle cx="550" cy="240" r="45"/><circle cx="325" cy="360" r="45"/><circle cx="475" cy="360" r="45"/></g><text x="400" y="520" text-anchor="middle" font-family="Arial" font-size="27" fill="#6a6a6a">Flexible • reusable • easy release</text></svg>`),
+  fondant: svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" rx="36" fill="#f8f6f0"/><text x="400" y="70" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#122b4d">FONDANT TOOL KIT</text><g fill="none" stroke="#122b4d" stroke-width="16" stroke-linecap="round"><path d="M190 180v250"/><path d="M290 180v250"/><path d="M390 180v250"/><path d="M490 180v250"/><path d="M590 180v250"/></g><g fill="#c99b22"><circle cx="190" cy="180" r="26"/><circle cx="290" cy="180" r="26"/><circle cx="390" cy="180" r="26"/><circle cx="490" cy="180" r="26"/><circle cx="590" cy="180" r="26"/></g><text x="400" y="520" text-anchor="middle" font-family="Arial" font-size="27" fill="#6a6a6a">Shape • smooth • detail your fondant</text></svg>`),
+  scraper: svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" rx="36" fill="#f8f6f0"/><text x="400" y="70" text-anchor="middle" font-family="Arial" font-size="36" font-weight="700" fill="#122b4d">CAKE SCRAPER SET</text><path d="M230 180h340v250H230z" fill="#dfe4e8" stroke="#122b4d" stroke-width="12"/><path d="M270 180v-45h260v45" fill="none" stroke="#c99b22" stroke-width="18"/><path d="M270 250h260M270 320h260M270 390h260" stroke="#fff" stroke-width="12"/><text x="400" y="520" text-anchor="middle" font-family="Arial" font-size="27" fill="#6a6a6a">Clean edges • smooth finishes</text></svg>`)
+};
+
 const products = [
-  {id:1,name:'12-Piece Nozzle Set',category:'Decorating Tools',price:1699,old:1999,tag:'Bestseller',image:null},
-  {id:2,name:'Premium Cake Mold',category:'Cake Molds',price:899,old:1250,tag:'Sale',image:null},
-  {id:3,name:'Silicone Fondant Mold',category:'Silicone Molds',price:599,old:850,tag:'Popular',image:null},
-  {id:4,name:'Fondant Decorating Tool Kit',category:'Fondant Tools',price:1199,old:1499,tag:'New',image:null},
-  {id:5,name:'Creative Cookie Cutter Set',category:'Cookie Cutters',price:499,old:699,tag:'Sale',image:null},
-  {id:6,name:'Cake Scraper Set',category:'Decorating Tools',price:759,old:950,tag:'Popular',image:null},
-  {id:7,name:'Muffin & Cupcake Pan',category:'Baking Accessories',price:1350,old:1700,tag:'New',image:null},
-  {id:8,name:'Pizza Cutter',category:'Baking Accessories',price:449,old:599,tag:'Value',image:null}
+  {id:1,name:'12-Piece Nozzle Set',category:'Decorating Tools',price:1699,old:1999,tag:'Bestseller',image:visual.nozzle},
+  {id:2,name:'Premium Cake Mold',category:'Cake Molds',price:899,old:1250,tag:'Sale',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Angel_Food_Cake_Pan.JPG'},
+  {id:3,name:'Silicone Fondant Mold',category:'Silicone Molds',price:599,old:850,tag:'Popular',image:visual.silicone},
+  {id:4,name:'Fondant Decorating Tool Kit',category:'Fondant Tools',price:1199,old:1499,tag:'New',image:visual.fondant},
+  {id:5,name:'Creative Cookie Cutter Set',category:'Cookie Cutters',price:499,old:699,tag:'Sale',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/CookieCuttersAl.jpg'},
+  {id:6,name:'Cake Scraper Set',category:'Decorating Tools',price:759,old:950,tag:'Popular',image:visual.scraper},
+  {id:7,name:'Muffin & Cupcake Pan',category:'Baking Accessories',price:1350,old:1700,tag:'New',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Muffin_pan.jpg'},
+  {id:8,name:'Pizza Cutter',category:'Baking Accessories',price:449,old:599,tag:'Value',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Wood_and_bone_pastry_wheel.jpg'},
+  {id:9,name:'Can & Bottle Opener',category:'Baking Accessories',price:899,old:null,tag:'New',image:'assets/images/can-opener.jpg'}
 ];
 
 function money(n){ return 'Rs. ' + Number(n).toLocaleString('en-PK'); }
@@ -27,8 +38,8 @@ function productLink(id){ return `product.html?id=${id}`; }
 function whatsappUrl(message){ return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`; }
 function orderMessage(p){ return `Assalam o Alaikum MOLD MASTER, I want to order ${p.name} for ${money(p.price)}.`; }
 function productVisual(p){
-  if(p.image) return `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">`;
-  return `<div class="product-placeholder"><span>IMAGE</span><small>Real product image pending</small></div>`;
+  if(p.image) return `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="product-placeholder fallback"><span>IMAGE</span><small>Image unavailable</small></div>`;
+  return `<div class="product-placeholder"><span>IMAGE</span><small>Product image</small></div>`;
 }
 function card(p){
   const wish=getWishlist().includes(p.id);
