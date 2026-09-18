@@ -2,16 +2,16 @@ const WHATSAPP='923338748486';
 const CART_KEY='moldMasterCart';
 const WISHLIST_KEY='moldMasterWishlist';
 
-// Clean product photography from reusable/public-license Wikimedia Commons sources.
+// MOLD MASTER verified/generated local image assets.
 // 
 const products=[
-{id:1,name:'12-Piece Nozzle Set',category:'Decorating Tools',price:1699,old:1999,tag:'Bestseller',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Decorating_tips_macro.jpg'},
-{id:2,name:'Premium Cake Mold',category:'Cake Molds',price:899,old:1250,tag:'Sale',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/SpringformPan.jpg'},
-{id:3,name:'Silicone Fondant Mold',category:'Silicone Molds',price:599,old:850,tag:'Popular',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Silicone_mold.jpg'},
-{id:4,name:'Fondant Decorating Tool Kit',category:'Fondant Tools',price:1199,old:1499,tag:'New',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake_making_tools.jpg'},
-{id:5,name:'Creative Cookie Cutter Set',category:'Cookie Cutters',price:499,old:699,tag:'Sale',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Christmas_Cookie_Cutters.jpg'},
-{id:6,name:'Cake Scraper Set',category:'Decorating Tools',price:759,old:950,tag:'Popular',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Teigschaber.jpg'},
-{id:7,name:'Muffin & Cupcake Pan',category:'Baking Accessories',price:1350,old:1700,tag:'New',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Muffin_pan.jpg'},
+{id:1,name:'12-Piece Nozzle Set',category:'Decorating Tools',price:1699,old:1999,tag:'Bestseller',image:'assets/images/product-12-piece-nozzle-set.jpg'},
+{id:2,name:'Premium Cake Mold',category:'Cake Molds',price:899,old:1250,tag:'Sale',image:'assets/images/product-premium-cake-mold.jpg'},
+{id:3,name:'Silicone Fondant Mold',category:'Silicone Molds',price:599,old:850,tag:'Popular',image:'assets/images/product-silicone-fondant-mold.jpg'},
+{id:4,name:'Fondant Decorating Tool Kit',category:'Fondant Tools',price:1199,old:1499,tag:'New',image:'assets/images/product-fondant-decorating-tool-kit.jpg'},
+{id:5,name:'Creative Cookie Cutter Set',category:'Cookie Cutters',price:499,old:699,tag:'Sale',image:'assets/images/category-cookie-cutters.jpg'},
+{id:6,name:'Cake Scraper Set',category:'Decorating Tools',price:759,old:950,tag:'Popular',image:'assets/images/category-decorating-tools.jpg'},
+{id:7,name:'Muffin & Cupcake Pan',category:'Baking Accessories',price:1350,old:1700,tag:'New',image:'assets/images/category-baking-accessories.jpg'},
 {id:8,name:'Can & Bottle Opener',category:'Baking Accessories',price:899,old:null,tag:'New',image:'assets/images/can-opener.jpg'}
 ];
 
