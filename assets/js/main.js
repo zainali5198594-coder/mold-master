@@ -3,7 +3,7 @@ const CART_KEY='moldMasterCart';
 const WISHLIST_KEY='moldMasterWishlist';
 
 // Clean product photography from reusable/public-license Wikimedia Commons sources.
-// These are used as category/reference visuals, not presented as official MOLD MASTER photography.
+// 
 const products=[
 {id:1,name:'12-Piece Nozzle Set',category:'Decorating Tools',price:1699,old:1999,tag:'Bestseller',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Decorating_tips_macro.jpg'},
 {id:2,name:'Premium Cake Mold',category:'Cake Molds',price:899,old:1250,tag:'Sale',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/SpringformPan.jpg'},
