@@ -68,3 +68,30 @@
  .product-img{height:180px!important;min-height:180px!important;max-height:180px!important}
  .hero-card{height:300px!important;min-height:300px!important;max-height:300px!important}
 }
+
+/* Robust image error fallback + final normalized sizing */
+.image-missing{position:relative!important;background:linear-gradient(135deg,#f4efe7,#e6ddcf)!important;display:grid!important;place-items:center!important}
+.image-missing::after{content:'MOLD MASTER';font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.16em;color:#8c7a5e;opacity:.9}
+.hero-card.image-missing{height:520px!important;min-height:520px!important}
+.category-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+.image-category{height:250px!important;min-height:250px!important;max-height:250px!important;overflow:hidden!important}
+.image-category img{width:100%!important;height:170px!important;min-height:170px!important;max-height:170px!important;object-fit:cover!important;object-position:center!important}
+.deal-visual{height:280px!important;min-height:280px!important;max-height:280px!important}
+.deal-visual img{width:100%!important;height:100%!important;object-fit:cover!important}
+.brand-panel{height:300px!important;min-height:300px!important;max-height:300px!important}
+.brand-panel img{width:100%!important;height:100%!important;object-fit:cover!important}
+.cta-backdrop{overflow:hidden!important}
+.cta-backdrop img{width:100%!important;height:100%!important;object-fit:cover!important}
+@media(max-width:900px){
+ .category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .image-category{height:230px!important;min-height:230px!important;max-height:230px!important}
+ .image-category img{height:155px!important;min-height:155px!important;max-height:155px!important}
+ .hero-card.image-missing{height:380px!important;min-height:380px!important}
+}
+@media(max-width:560px){
+ .category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ .image-category{height:205px!important;min-height:205px!important;max-height:205px!important}
+ .image-category img{height:135px!important;min-height:135px!important;max-height:135px!important}
+ .product-img{height:180px!important;min-height:180px!important;max-height:180px!important}
+ .hero-card,.hero-card.image-missing{height:300px!important;min-height:300px!important}
+}
