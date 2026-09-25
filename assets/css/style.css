@@ -168,3 +168,23 @@
  .deal-visual{width:100%;margin-top:25px}
  .brand-panel{aspect-ratio:4/2!important}
 }
+
+/* MOLD MASTER catalog expansion */
+.category-slider{display:flex!important;overflow-x:auto!important;overflow-y:hidden!important;gap:14px!important;padding:4px 2px 18px!important;scroll-snap-type:x proximity;scrollbar-width:thin}
+.category-slider .category-slide{flex:0 0 176px!important;width:176px!important;height:205px!important;min-height:205px!important;max-height:205px!important;scroll-snap-align:start;border:1px solid rgba(23,21,18,.08);box-shadow:0 8px 24px rgba(23,21,18,.06);transition:transform .25s ease,box-shadow .25s ease}
+.category-slider .category-slide:hover{transform:translateY(-5px);box-shadow:0 18px 34px rgba(23,21,18,.11)}
+.category-slider .category-slide img{height:145px!important;min-height:145px!important;max-height:145px!important}
+.category-slider .category-slide>div{height:60px!important;padding:10px 12px!important;justify-content:center}
+.category-slider .category-slide h3{font-size:13px!important}
+.category-slider .category-slide p{font-size:10px!important;color:var(--muted)}
+.products-section{background:radial-gradient(circle at 10% 0%,rgba(181,138,59,.10),transparent 28%),linear-gradient(180deg,#fffdf9 0%,#f7f3eb 100%)}
+.products-section .product-card{background:rgba(255,255,255,.96);border:1px solid rgba(23,21,18,.08);box-shadow:0 8px 25px rgba(23,21,18,.055)}
+.product-tag{letter-spacing:.08em;text-transform:uppercase}
+@media(max-width:560px){
+.category-slider{gap:10px!important}
+.category-slider .category-slide{flex-basis:145px!important;width:145px!important;height:178px!important;min-height:178px!important;max-height:178px!important}
+.category-slider .category-slide img{height:125px!important;min-height:125px!important;max-height:125px!important}
+.category-slider .category-slide>div{height:53px!important;padding:7px 9px!important}
+.category-slider .category-slide h3{font-size:11px!important}
+.category-slider .category-slide p{font-size:9px!important}
+}
