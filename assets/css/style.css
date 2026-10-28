@@ -216,3 +216,13 @@
 .section-head h2{letter-spacing:-.02em}
 .btn{border-radius:2px}
 @media(max-width:560px){.image-category img{height:105px}.product-img{height:205px;padding:10px}.product-info{padding:13px}.product-info h3{font-size:13px;min-height:38px}.hero-media-label b{font-size:17px}}
+
+
+/* MOLD MASTER original artwork polish */
+.product-img{display:grid;place-items:center;aspect-ratio:1/1;height:auto;min-height:0;overflow:hidden;background:linear-gradient(145deg,#fbf9f4,#eee6d9);padding:12px}
+.product-img img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;mix-blend-mode:normal;transition:transform .35s ease}
+.image-category img{object-fit:contain;background:linear-gradient(145deg,#fbf9f4,#eee6d9)}
+.hero-media>img{object-fit:contain;padding:0;background:#eee8de}
+.product-placeholder.fallback{display:none;place-items:center;text-align:center;color:var(--muted);min-height:100%;width:100%}
+.product-placeholder.fallback small{display:block;margin-top:8px}
+@media(max-width:560px){.product-img{aspect-ratio:1/1;height:auto;padding:8px}.product-img img{height:100%}}
